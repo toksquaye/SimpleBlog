@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+<!--below is a page layout to be used by a view that references this file-->
+<!DOCTYPE html>
+
+<html>
+<head>    
+    <title>@ViewBag.Title - Simple Blog</title>
+</head>
+<body>
+    <header>
+        <h1> <a href="@Url.RouteUrl("home")"> Simple Blog </a></h1>
+        <a href="@Url.RouteUrl("login")"> Login </a>
+    </header>
+    <!--inserts the view here-->
+    @RenderBody();
+
+    <footer>
+        &copy; @DateTime.UtcNow.Year - ToksQ
+    </footer>
+
+    @RenderSection("Scripts",false);
+</body>
+</html>
