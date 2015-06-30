@@ -11,8 +11,25 @@
 <body>
     <header>
         <h1> <a href="@Url.RouteUrl("home")"> Simple Blog </a></h1>
-        <a href="@Url.RouteUrl("login")"> Login </a>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p>Welcome back, @User.Identity.Name</p>
+            <a href="@Url.RouteUrl("logout")">Logout</a>
+
+            //if admin, show admin link
+            if (User.IsInRole("admin"))
+            {
+
+                <a href="@Url.Action("index", "Posts", new{area="admin"})">View posts in admin</a>
+            }
+        }
+        else
+        {
+            <a href="@Url.RouteUrl("login")"> Login </a>
+        }
     </header>
+
     <!--inserts the view here-->
     @RenderBody()
 
@@ -20,6 +37,9 @@
         &copy; @DateTime.UtcNow.Year - ToksQ
     </footer>
 
-    @RenderSection("Scripts",false)
+    @RenderSection("Scripts", false)
 </body>
+
+
+
 </html>

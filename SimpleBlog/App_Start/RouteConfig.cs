@@ -26,6 +26,7 @@ namespace SimpleBlog
             );*/
 
             routes.MapRoute("Login", "login", new { controller = "Auth", action = "Login" }, namespaces);
+            routes.MapRoute("Logout", "logout", new { controller = "Auth", action = "Logout" }, namespaces);
             //Home - name of page
             //"" - home page - dosn't need any slashes
             // controller called is PostsController

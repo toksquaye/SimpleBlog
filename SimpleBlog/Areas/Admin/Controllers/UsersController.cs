@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace SimpleBlog.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "admin")] //only a logged in admin can use controller
     public class UsersController : Controller
     {
         public ActionResult Index()
