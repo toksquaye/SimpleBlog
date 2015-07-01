@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Web.Optimization
+@{
     Layout = null;
 }
 <!--below is a page layout to be used by a view that references this file-->
@@ -7,10 +8,15 @@
 <html>
 <head>    
     <title>@ViewBag.Title - Simple Blog</title>
+    @Styles.Render("~/styles")
+
 </head>
 <body>
     <header>
-        <h1> <a href="@Url.RouteUrl("home")"> Simple Blog </a></h1>
+        <h1>
+            <a href="@Url.RouteUrl("home")"> Simple Blog </a>
+            <i class="glyphicon glyphicon-bell"></i>
+        </h1>
 
         @if (User.Identity.IsAuthenticated)
         {
@@ -36,7 +42,7 @@
     <footer>
         &copy; @DateTime.UtcNow.Year - ToksQ
     </footer>
-
+    @Scripts.Render("~/scripts");
     @RenderSection("Scripts", false)
 </body>
 
