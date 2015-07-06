@@ -40,6 +40,7 @@ namespace SimpleBlog.Controllers
 
             if (user == null || !user.CheckPassword(form.Password))
                 ModelState.AddModelError("Username", "Username or password is incorrect");
+            
             if (!ModelState.IsValid) //if validation check fails
                 return View(form);  //give user form back
 
@@ -53,7 +54,6 @@ namespace SimpleBlog.Controllers
 
             return RedirectToRoute("home");
             
-
         }
 
     }
