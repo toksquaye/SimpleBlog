@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using NHibernate.Linq;
+using SimpleBlog.Models;
 
 
 namespace SimpleBlog.Controllers
@@ -28,17 +30,23 @@ namespace SimpleBlog.Controllers
         [HttpPost]
         public ActionResult Login(AuthLogin form, string returnUrl)
         {
+            var user = Database.Session.Query<User>().FirstOrDefault(u => u.Username == form.Username);
+
+            //this is to prevent timing attacks during login
+            //the time to check for a user that isn't in the db and the time
+            //that checks for a user that is in the db is now similar
+            if (user == null)
+                SimpleBlog.Models.User.FakeHash();
+
+            if (user == null || !user.CheckPassword(form.Password))
+                ModelState.AddModelError("Username", "Username or password is incorrect");
             if (!ModelState.IsValid) //if validation check fails
                 return View(form);  //give user form back
 
-            /*if(form.Username != "toks")
-            {
-                ModelState.AddModelError("Username", "Username or password is wrong");
-                return View(form);
-            }*/
+            
 
             //tell asp.net a person is who he says he is. letting asp know what user is logged in
-            FormsAuthentication.SetAuthCookie(form.Username, true);
+            FormsAuthentication.SetAuthCookie(user.Username, true);
 
             if (!string.IsNullOrWhiteSpace(returnUrl))
                 return Redirect(returnUrl);
