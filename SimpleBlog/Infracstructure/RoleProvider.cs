@@ -10,10 +10,12 @@ namespace SimpleBlog.Infracstructure
 
         public override string[] GetRolesForUser(string username)
         {//takes username and returns every role that the user is in
-            if(username == "toks")
+            /*if(username == "toks")
                 return new[] { "admin" };
 
-            return new string[]{};
+            return new string[]{};*/
+            
+            return Auth.User.Roles.Select(role => role.Name).ToArray();
         }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)

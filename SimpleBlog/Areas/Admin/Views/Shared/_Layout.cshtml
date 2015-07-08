@@ -42,7 +42,7 @@
     @RenderSection("Scripts", false)
 
     <form class="hidden" id="anti-forgery-form">
-        @Html.AntiForgeryToken();
+        @Html.AntiForgeryToken(); <!--injects input tag with __RequestVerificationToken as value-->
     </form>
 
 </body>

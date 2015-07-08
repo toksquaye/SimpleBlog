@@ -26,12 +26,13 @@ namespace SimpleBlog
             var config = new Configuration();
 
             //configure the connection string
-            //picks up settings from webconfig
+            //picks up settings from webconfig as default behavior
             config.Configure();
 
-            //add our mappings
+            //add our mappings - for NHibernate purposes
             var mapper = new ModelMapper();
             mapper.AddMapping<UserMap>();
+            mapper.AddMapping<RoleMap>();
 
             config.AddMapping(mapper.CompileMappingForAllExplicitlyAddedEntities());
 
@@ -48,6 +49,7 @@ namespace SimpleBlog
         //A session is an individual connection to the database
         public static void CloseSession()
         {
+            //ISession used by NHibernate to represent a session
             var session = HttpContext.Current.Items[SessionKey] as ISession;
             if (session != null)
                 session.Close(); //close session to database

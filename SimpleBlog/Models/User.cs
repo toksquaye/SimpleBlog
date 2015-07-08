@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using System.Collections.Generic;
 
 namespace SimpleBlog.Models
 {
@@ -16,6 +17,13 @@ namespace SimpleBlog.Models
         public virtual string Email { get; set; }
         public virtual string PasswordHash { get; set; }
 
+        public virtual IList<Role> Roles { get; set; } //this tracks roles that user has.
+                                                        //nhibernate takes care of roleuser mapping
+        public User()
+        {
+            Roles = new List<Role>() { };   //instantiate list to an empty one
+        }
+        
         public virtual void SetPassword(string password)
         {
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(password, WorkFactor); ;
@@ -46,6 +54,12 @@ namespace SimpleBlog.Models
                     x.Column("password_hash");
                     x.NotNullable(true);
                 });
+
+            Bag(x => x.Roles, x =>      //relates one entity to another. this maps the roles
+                {
+                    x.Table("role_users");
+                    x.Key(k => k.Column("user_id"));
+                }, x => x.ManyToMany(k=> k.Column("role_id")));
         }
     }
 }
