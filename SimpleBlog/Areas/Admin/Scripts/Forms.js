@@ -21,4 +21,24 @@
             .appendTo(document.body)
             .submit();
     });
+
+    $("[data-slug]").each(function() 
+    { //loop thru anything with a data-slug attribute
+        
+        var $this = $(this);
+        var $sendSlugFrom = $($this.data("slug")); //get text field of element we're getting the slug from?
+
+        $sendSlugFrom.keyup(function () {
+            console.log("here");
+            var slug = $sendSlugFrom.val();
+            
+            slug = slug.replace(/[^a-zA-Z0-9\s]/g, ""); //remove all special characters
+            slug = slug.toLowerCase();
+            slug = slug.replace(/\s+/g, "-"); //replace any spaces with -
+
+            if (slug.charAt(slug.length - 1) == "-")
+                slug = slug.substr(0, slug.length - 1);
+            $this.val(slug);
+        });
+     });
 });
