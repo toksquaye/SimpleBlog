@@ -47,7 +47,7 @@ namespace SimpleBlog.Models
                     x.NotNullable(true);
                 });
 
-            Property(x => x.UpdatedAt, x => x.Column("updated_dat"));
+            Property(x => x.UpdatedAt, x => x.Column("updated_at"));
             Property(x => x.DeletedAt, x => x.Column("deleted_at"));
 
             Bag(x => x.Tags, x =>
