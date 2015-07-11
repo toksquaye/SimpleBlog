@@ -15,17 +15,29 @@ namespace SimpleBlog.Areas.Admin.Controllers
     [SelectedTab("posts")]
     public class PostsController : Controller
     {
-        private const int PostsPerPage = 5;
+        private const int PostsPerPage = 10;
 
         public ActionResult Index(int page = 1) //default parameter value if none is provided
         {
             var totalPostCount = Database.Session.Query<Post>().Count(); //count of items in post table of database
 
-            var currentPostPage = Database.Session.Query<Post>()
+            var baseQuery = Database.Session.Query<Post>().OrderByDescending(c => c.CreatedAt);
+            
+            //pagination and filtering if necessary
+            var postIds = baseQuery//order in descending order based on createat date
+                .Skip((page - 1) * PostsPerPage)//if page 2, skip (2-1)*5 items
+                .Take(PostsPerPage)//take PostsPerPage items from after skipping aboove
+                .Select(p => p.Id)//select their ids
+                .ToArray(); //make into an arra
+
+            //data retrieval
+            var currentPostPage = baseQuery
+                .Where(p => postIds.Contains(p.Id))
                 .OrderByDescending(c => c.CreatedAt) //order in descending order based on createat date
-                .Skip((page - 1) * PostsPerPage) //if page 2, skip (2-1)*5 items
-                .Take(PostsPerPage)     //take 5 items from after skipping aboove
+                .FetchMany(f => f.Tags)
+                .Fetch(f => f.User)
                 .ToList();  //flatten them into a list
+
             return View(new PostsIndex
                 {
                     Posts = new PagedData<Post>(currentPostPage, totalPostCount, page, PostsPerPage)
@@ -75,7 +87,7 @@ namespace SimpleBlog.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(form);
 
-            var selectedTags = ReconsileTags(form.Tags).ToList(); //add newly added tags to database
+            var selectedTags = ReconsileTags(form.Tags).ToList(); //create list of selected tags and match them with values in database
             Post post;
             if (form.IsNew)
             {
@@ -90,7 +102,7 @@ namespace SimpleBlog.Areas.Admin.Controllers
             }
             else
             {
-                post = Database.Session.Load<Post>(form.PostId);
+                post = Database.Session.Load<Post>(form.PostId); //extract data with using formid
 
                 if (post == null)
                     return HttpNotFound();
