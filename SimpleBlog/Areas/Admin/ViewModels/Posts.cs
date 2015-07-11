@@ -8,6 +8,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SimpleBlog.Areas.Admin.ViewModels
 {
+    public class TagCheckbox
+    {
+        public int? Id { get; set; }
+        public string Name { get; set; }
+        public bool IsChecked { get; set; }
+    }
+
     public class PostsIndex
     {
         public PagedData<Post> Posts { get; set; }
@@ -26,5 +33,8 @@ namespace SimpleBlog.Areas.Admin.ViewModels
 
         [Required, DataType(DataType.MultilineText)]
         public string Content { get; set; }
+
+        //tags to be shown on the form
+        public IList<TagCheckbox> Tags { get; set; }
     }
 }

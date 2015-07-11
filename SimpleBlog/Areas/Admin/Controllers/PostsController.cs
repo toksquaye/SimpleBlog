@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using SimpleBlog.Models;
 using NHibernate.Linq;
 using SimpleBlog.Areas.Admin.ViewModels;
+using SimpleBlog.Infracstructure.Extensions;
+
 namespace SimpleBlog.Areas.Admin.Controllers
 {
     [Authorize(Roles="admin")] //only a logged in admin can use controller
@@ -34,7 +36,13 @@ namespace SimpleBlog.Areas.Admin.Controllers
         {
             return View("form", new PostsForm
             {
-                IsNew = true
+                IsNew = true,
+                Tags = Database.Session.Query<Tag>().Select(tag => new TagCheckbox 
+                {
+                    Id = tag.Id,
+                    Name = tag.Name,
+                    IsChecked = false
+                }).ToList()
             });
         }
 
@@ -50,7 +58,13 @@ namespace SimpleBlog.Areas.Admin.Controllers
                 PostId = id,
                 Content = post.Content,
                 Slug = post.Slug,
-                Title = post.Title
+                Title = post.Title,
+                Tags = Database.Session.Query<Tag>().Select(tag => new TagCheckbox 
+                { 
+                    Id = tag.Id,
+                    Name = tag.Name,
+                    IsChecked = post.Tags.Contains(tag)
+                }).ToList()
             });
         }
         [HttpPost, ValidateAntiForgeryToken]
@@ -61,6 +75,7 @@ namespace SimpleBlog.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(form);
 
+            var selectedTags = ReconsileTags(form.Tags).ToList(); //add newly added tags to database
             Post post;
             if (form.IsNew)
             {
@@ -69,6 +84,9 @@ namespace SimpleBlog.Areas.Admin.Controllers
                     CreatedAt = DateTime.UtcNow,
                     User = Auth.User,
                 };
+
+                foreach (var tag in selectedTags)
+                    post.Tags.Add(tag);
             }
             else
             {
@@ -78,6 +96,12 @@ namespace SimpleBlog.Areas.Admin.Controllers
                     return HttpNotFound();
 
                 post.UpdatedAt = DateTime.UtcNow;
+
+                foreach (var toAdd in selectedTags.Where(t => !post.Tags.Contains(t)))
+                    post.Tags.Add(toAdd);
+
+                foreach (var toRemove in post.Tags.Where(t => !selectedTags.Contains(t)).ToList())
+                    post.Tags.Remove(toRemove);
             }
 
             post.Title = form.Title;
@@ -122,6 +146,33 @@ namespace SimpleBlog.Areas.Admin.Controllers
             post.DeletedAt = DateTime.UtcNow;
             Database.Session.Update(post);
             return RedirectToAction("Index");
+        }
+
+        private IEnumerable<Tag> ReconsileTags(IEnumerable<TagCheckbox> tags)
+        {
+            foreach (var tag in tags.Where(t => t.IsChecked)) //loop only through checked tags
+            {
+                if (tag.Id != null)
+                {
+                    yield return Database.Session.Load<Tag>(tag.Id); //if not new tag, continue
+                    continue;
+                }
+
+                var existingTag = Database.Session.Query<Tag>().FirstOrDefault(t => t.Name == tag.Name);
+                if(existingTag != null) //if new tag matchs one that already exists, return that one
+                {
+                    yield return existingTag;
+                    continue;
+                }
+
+                var newTag = new Tag{
+                    Name = tag.Name,
+                    Slug = tag.Name.Slugify()
+                };
+
+                Database.Session.Save(newTag);
+                yield return newTag;
+            }
         }
 
 

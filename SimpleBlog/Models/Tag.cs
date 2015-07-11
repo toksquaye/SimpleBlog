@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using System.Collections.Generic;
 
 namespace SimpleBlog.Models
 {
@@ -15,6 +14,11 @@ namespace SimpleBlog.Models
         public virtual string Name { get; set; }
 
         public virtual IList<Post> Posts { get; set; } //Posts and Tags have a manytomany relationship
+ 
+        public Tag()
+        {
+            Posts = new List<Post>();
+        }
     }
 
     public class TagMap : ClassMapping<Tag>
