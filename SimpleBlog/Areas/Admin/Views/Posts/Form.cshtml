@@ -2,12 +2,12 @@
 
 <h1>@(Model.IsNew ? "Create Post" : "Update Post")</h1>
 
-@using(@Html.BeginForm("Form", "Posts"))
+@using(@Html.BeginForm("Form", "Posts")) //Form is action/method. Posts is controller
 {
-    if (Model.IsNew)
-    {
-        @Html.HiddenFor(f => f.PostId)
-    }
+    //if (Model.IsNew)
+    //{
+        @Html.HiddenFor(f => f.PostId) //sets the postId viewmodel property
+    //}
     @Html.AntiForgeryToken()
 
     <div class="row">
