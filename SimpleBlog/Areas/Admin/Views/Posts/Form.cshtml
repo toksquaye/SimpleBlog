@@ -4,10 +4,11 @@
 
 @using(@Html.BeginForm("Form", "Posts")) //Form is action/method. Posts is controller
 {
-    //if (Model.IsNew)
-    //{
+    
+    if (!Model.IsNew)
+    {
         @Html.HiddenFor(f => f.PostId) //sets the postId viewmodel property
-    //}
+    }
     @Html.AntiForgeryToken()
 
     <div class="row">
@@ -78,4 +79,9 @@
 @section Scripts
 {
     @Scripts.Render("~/admin/post/scripts")
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+    <script>
+        CKEDITOR.replace("Content");
+    </script>
 }

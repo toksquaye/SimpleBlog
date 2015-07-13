@@ -79,7 +79,7 @@ namespace SimpleBlog.Areas.Admin.Controllers
                 }).ToList()
             });
         }
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, ValidateInput(false)] //validateinput(false)allows html posts on the form
         public ActionResult Form(PostsForm form)
         {
             form.IsNew = form.PostId == null; //form is new if theres no postId

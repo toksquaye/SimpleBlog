@@ -1,0 +1,9 @@
+diff a/SimpleBlog/Areas/Admin/Views/Posts/Form.cshtml b/SimpleBlog/Areas/Admin/Views/Posts/Form.cshtml	(rejected hunks)
+@@ -4,7 +4,6 @@
+ 
+ @using(@Html.BeginForm("Form", "Posts")) //Form is action/method. Posts is controller
+ {
+-    {
+     //if (Model.IsNew)
+     //{
+         @Html.HiddenFor(f => f.PostId) //sets the postId viewmodel property
