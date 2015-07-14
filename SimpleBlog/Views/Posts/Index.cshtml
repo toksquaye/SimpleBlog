@@ -1,19 +1,7 @@
-﻿@{
+﻿@model SimpleBlog.ViewModel.PostsIndex
+
+@{
     ViewBag.Title = "Posts";
 }
-    <h1> Posts Index</h1>
-    @* @if (true)
-        {
-            <text> <p> True is true </p> </text>
-        }
-    *@
 
-    <p>
-        
-        <a href= @Url.RouteUrl("login")> Click here </a> to login!
-    </p>
-
-    <p>
-        @Html.RouteLink("Click Here","login") to login! 
-    </p>
-
+@Html.Partial("_Posts", Model.Posts);

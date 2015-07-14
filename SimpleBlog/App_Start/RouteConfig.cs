@@ -25,6 +25,13 @@ namespace SimpleBlog
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );*/
 
+            routes.MapRoute("TagForRealThisTime", "tag/{idAndSlug}", new { controller = "Posts", action = "Tag" }, namespaces);
+            routes.MapRoute("Tag", "tag/{id}-{slug}", new{ controller="Posts", action="Tag"}, namespaces);
+
+            // http://blog.dev/post/472-this-is-a-slug
+            routes.MapRoute("PostForRealThisTime", "post/{idAndSlug}", new { controller = "Posts", action = "Show" }, namespaces); //route to be matched by router - cos router get confused by - character
+            routes.MapRoute("Post", "post/{id}-{slug}", new { controller = "Posts", action = "Show" }, namespaces);//used to generate the urls
+
             routes.MapRoute("Login", "login", new { controller = "Auth", action = "Login" }, namespaces);
             routes.MapRoute("Logout", "logout", new { controller = "Auth", action = "Logout" }, namespaces);
             //Home - name of page
