@@ -7,45 +7,38 @@
 
 <html>
 <head>    
+    <meta charset="utf-8" />
     <title>@ViewBag.Title - Simple Blog</title>
     @Styles.Render("~/styles")
 
 </head>
 <body>
-    <header>
-        <h1>
-            <a href="@Url.RouteUrl("home")"> Simple Blog </a>
-            <i class="glyphicon glyphicon-bell"></i>
-        </h1>
+    <div class="site-header">
+        <header class="container">
+            <h1 class="page-header">
+                <a href="@Url.RouteUrl("Home")"> Amazing Stuff!</a> 
+                <small>a simple blog powered by ASP.net MVC</small>
+            </h1>
+        </header>
+    </div>
 
-        @if (User.Identity.IsAuthenticated)
-        {
-            <p>Welcome back, @User.Identity.Name</p>
-            <a href="@Url.RouteUrl("logout")">Logout</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                @RenderBody()
+            </div>
+            <div class="col-lg-4 sidebar">
+                @Html.Action("Sidebar","Layout")
+            </div>
+        </div>
 
-            //if admin, show admin link
-            if (User.IsInRole("admin"))
-            {
-
-                <a href="@Url.Action("index", "Posts", new{area="admin"})">View posts in admin</a>
-            }
-        }
-        else
-        {
-            <a href="@Url.RouteUrl("login")"> Login </a>
-        }
-    </header>
-
-    <!--inserts the view here-->
-    @RenderBody()
-
-    <footer>
-        &copy; @DateTime.UtcNow.Year - ToksQ
-    </footer>
-    @Scripts.Render("~/scripts");
+        <footer>
+            &copy; ToksQ @DateTime.UtcNow.Year
+        </footer>
+    </div>
+    @Scripts.Render("~/scripts")
     @RenderSection("Scripts", false)
-
- </body>
+</body>
 
 
 

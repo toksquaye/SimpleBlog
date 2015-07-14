@@ -35,10 +35,12 @@ namespace SimpleBlog
             routes.MapRoute("Login", "login", new { controller = "Auth", action = "Login" }, namespaces);
             routes.MapRoute("Logout", "logout", new { controller = "Auth", action = "Logout" }, namespaces);
             //Home - name of page
-            //"" - home page - dosn't need any slashes
+            //"" - home page - dosn't need any slashes - no url
             // controller called is PostsController
             // method in PostsController called is Index
-            routes.MapRoute("Home", "", new { controller = "Posts", action = "Index" }, namespaces);
+            routes.MapRoute("Home", "", new {controller = "Posts", action = "Index" }, namespaces);
+            //since url param is empty, Home will override it.
+            routes.MapRoute("Sidebar", "", new { controller = "Layout", action = "Sidebar" }, namespaces);
         }
     }
 }
