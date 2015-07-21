@@ -17,6 +17,7 @@ namespace SimpleBlog.Controllers
         public ActionResult Index(int page = 1)
         {
             //return Content("Hello World");
+
             var baseQuery = Database.Session.Query<Post>() //get posts that dont have a deletedat value
                 .Where(t => t.DeletedAt == null)            //i.e. undeleted posts
                 .OrderByDescending(t => t.CreatedAt);

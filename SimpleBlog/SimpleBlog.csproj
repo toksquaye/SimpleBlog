@@ -49,6 +49,9 @@
     <Reference Include="BCrypt.Net">
       <HintPath>..\packages\BCrypt.Net.0.1.0\lib\net35\BCrypt.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
     <Reference Include="FluentMigrator">
       <HintPath>..\packages\FluentMigrator.1.5.1.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
@@ -150,6 +153,7 @@
     <Compile Include="Areas\Admin\ViewModels\Users.cs" />
     <Compile Include="Auth.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Database.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Areas\Admin\Scripts\Forms.js" />
     <Content Include="Areas\Admin\Scripts\PostEditor.js" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.svg" />
@@ -464,6 +469,8 @@
     <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Posts\Tag.cshtml" />
     <Content Include="Views\Layout\Sidebar.cshtml" />
+    <Content Include="Views\Errors\NotFound.cshtml" />
+    <Content Include="Views\Errors\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
